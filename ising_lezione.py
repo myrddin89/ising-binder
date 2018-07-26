@@ -140,7 +140,7 @@ if PLOTIT:
     plt.plot(ip, mp, 'r-')
     plt.plot(ip, ap, 'k-')
     plt.grid()
-    #plt.show()
+    plt.show()
 
 eTot  /= NMC; mTot  /= NMC; aTot  /= NMC
 e2Tot /= NMC; m2Tot /= NMC; a2Tot /= NMC
