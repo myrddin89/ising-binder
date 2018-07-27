@@ -87,7 +87,7 @@ if (Nboot==0):
 def bootstrap_jacknife(T,Nboot_,datapoints_,distr_,want_vector):
 
     #VV=get_val.get_vector_random(distr_,datapoints_)
-    VV, lllll=get_val.get_vector_file('../lezioni/',32,0.44)
+    VV, lllll=get_val.get_vector_file('./',32,0.44)
     print(VV)
     print(len(VV))
     print(lllll)
@@ -119,7 +119,6 @@ def bootstrap_jacknife(T,Nboot_,datapoints_,distr_,want_vector):
         return v, ((moment(VV,4)/moment(VV,2)**2)-3), np.mean(v), np.std(v)*corr_fac
     else:
         return np.mean(v), np.std(v)*corr_fac
-
 
 
 
