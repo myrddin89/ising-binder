@@ -29,23 +29,27 @@ import progressbar as pbar
 import get_val
 import sys
 
-def bootstrap_jacknife(data, T, Nboot_, datapoints_, distr_, want_vector):
+def bootstrap_jacknife(data, T, Nboot, datapoints, distr, want_vector):
     #VV, lllll=get_val.get_vector_file('../lezioni/',32,0.44)
 
     VV = data.copy()
 
     v=[]
-
-
+    
+    if T == "boot":
+        corr_fac=1
+    else:
+        corr_fac=np.sqrt(datapoints-1)
+        
     if (Nboot==0):
         v.append((moment(VV,4)/moment(VV,2)**2)-3)
 
-    for k in range(Nboot_):
+    for k in range(Nboot):
         if (k%1000==0):
-            print((Nboot_-k)/1000)
+            print((Nboot-k)/1000)
 
         if (T=="boot"):
-            indici=np.random.randint(datapoints_,size=datapoints_)
+            indici=np.random.randint(datapoints,size=datapoints)
             boots=[VV[z] for z in indici]
 
 

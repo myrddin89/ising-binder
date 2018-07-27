@@ -5,8 +5,8 @@ from ising import Ising
 from kurt import bootstrap_jacknife
 
 def main():
-    ising1 = Ising(L=32, BETA=0.43, NTHERMA=1000, NMC=3000, START="c")
-    ising2 = Ising(L=32, BETA=0.45, NTHERMA=1000, NMC=3000, START="c")
+    ising1 = Ising(L=32, BETA=0.43, NTHERMA=1000, NMC=2000, START="c")
+    ising2 = Ising(L=32, BETA=0.45, NTHERMA=1000, NMC=2000, START="c")
 
     ising1.run()
     ising2.run()

@@ -62,7 +62,7 @@ class Ising(object):
         outfile = open(namefile,"w")
 
         eTot = e2Tot = mTot = m2Tot = aTot = a2Tot = 0.0
-        ip = []; ep = []; mp = []; ap = []
+        self.ip = []; self.ep = []; self.mp = []; self.ap = []
         j = 0
         for i in bar(range(self.NTHERMA+self.NMC)):
             j += 1
@@ -70,7 +70,7 @@ class Ising(object):
             if j > self.NTHERMA:
                 e, m = self.measure()
                 a = math.fabs(m)
-                ip.append(j-self.NTHERMA); ep.append(e); mp.append(m); ap.append(a)
+                self.ip.append(j-self.NTHERMA); self.ep.append(e); self.mp.append(m); self.ap.append(a)
                 outfile.write(str(a))
                 outfile.write('\n')
                 eTot  += e
