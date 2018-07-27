@@ -16,7 +16,7 @@ def get_vector_random(s,n):
 
 
 #def get_vector_file(pat,R,beta):
-def get_vector_file(filename)
+def get_vector_file(filename):
     #filename=pat+'Mag_'+str(R)+'_'+str(beta)+'.dat'
     VectorRet=np.loadtxt(filename)
     Datap=len(VectorRet)
