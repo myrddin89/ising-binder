@@ -1,29 +1,66 @@
 #! /usr/bin/env python3
 
+import progressbar as pbar
 import numpy as np
+from matplotlib import pyplot as plt
 from ising import Ising
 from kurt import bootstrap_jacknife
 
+class Binder(object):
+    def __init__(self, NTHERMA=1000, NMC=1000, START="c", Nboot=5000, Npoints=1000, method="boot", distr="gaus"):
+        self.NTHERMA = 1000
+        self.NMC = 1000
+        self.START = "c"
+        self.Nboot = 5000
+        self.Npoints = 1000
+        self.method="boot"
+        self.distr = "gaus"
+    
+    def __call__(self, L, beta):
+        ising = Ising(L=L, BETA=beta, NTHERMA=self.NTHERMA, NMC=self.NMC, START=self.START)
+        
+        ising.run()
+        
+        return bootstrap_jacknife(ising.ap, self.method, self.Nboot, self.Npoints, self.distr, False)
+
 def main():
-    ising1 = Ising(L=32, BETA=0.43, NTHERMA=1000, NMC=2000, START="c")
-    ising2 = Ising(L=32, BETA=0.45, NTHERMA=1000, NMC=2000, START="c")
-
-    ising1.run()
-    ising2.run()
-
+    bi = 0.43
+    bf = 0.45
+    lattices = [32, 64]
+    NL = len(lattices)
+    Nbeta = 4
+    NTHERMA = 1000
+    NMC = 1000
+    START = "c"
     Nboot = 5000
-    datapoints = 1000
-
-    Ul1, err1 = bootstrap_jacknife(ising1.ap, "boot", Nboot, datapoints, "gaus", False)
-
-    Ul2, err2 = bootstrap_jacknife(ising2.ap, "boot", Nboot, datapoints, "gaus", False)
-
-    print("""\
-    Binder1:
-        U_L = {:7.4f} +/- {:7.4f}
-    Binder2:
-        U_L = {:7.4f} +/- {:7.4f}
-    """.format(Ul1, err1, Ul2, err2))
+    Npoints = 1000
+    method = "boot"
+    distr = "gaus"
+    
+    betas = np.linspace(bi, bf, num=Nbeta, dtype=float)
+    binder_list = np.zeros((NL, Nbeta), dtype=float)
+    binder_err = np.zeros((NL, Nbeta), dtype=float)
+    
+    binder = Binder(NTHERMA=NTHERMA, NMC=NMC, START=START, Nboot=Nboot, Npoints=Npoints, method=method, distr=distr)
+    
+    # barL = pbar.ProgressBar()
+    # barB = pbar.ProgressBar()
+    
+    for L in range(NL):
+        for b in range(Nbeta):
+            print("""
+Computing binder for ({}, {})
+            """.format(lattices[L], betas[b]))
+            binder_list[L, b], binder_err[L, b] = binder(lattices[L], betas[b])
+    
+    plt.figure()
+    
+    for L in range(NL):
+        plt.plot(betas, binder_list[L,:])
+        
+    plt.grid()
+    plt.show()
 
 if __name__ == '__main__':
     main()
+ 
